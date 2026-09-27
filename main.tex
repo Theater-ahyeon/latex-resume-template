@@ -1,0 +1,76 @@
+% Anonymized, editable single-column resume example.
+% All names, contacts, schools, dates, awards and open-source entries are placeholders.
+% Compile with XeLaTeX.
+\documentclass[UTF8,scheme=plain,a4paper,10pt]{ctexart}
+
+\usepackage[top=12mm,bottom=12mm,left=13mm,right=13mm]{geometry}
+\usepackage{fontspec}
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{TeX Gyre Termes}}
+\usepackage{graphicx}
+\graphicspath{{assets/}}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\hypersetup{hidelinks,pdfauthor={Resume Example},pdftitle={Resume Example}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\linespread{1.08}
+\titleformat{\section}{\large}{}{0pt}{}[\titlerule]
+\titlespacing*{\section}{0pt}{8pt}{4pt}
+\setlist[itemize]{leftmargin=23pt,itemsep=2.5pt,topsep=2.5pt,parsep=0pt,partopsep=0pt}
+\newcommand{\datedheading}[2]{\textbf{#1}\hfill{#2}\par}
+\newcommand{\projectheading}[2]{\hspace*{10pt}\datedheading{#1}{#2}}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{center}
+  {\Huge\bfseries 求职者姓名}\\[3pt]
+  \normalsize
+  138-0000-0000\quad$|$\quad
+  \href{mailto:resume@example.com}{\underline{resume@example.com}}\quad$|$\quad
+  示例城市\quad$|$\quad
+  \underline{github.com/your-id}
+\end{center}
+
+\section{教育经历}
+\hspace*{17pt}\datedheading{\raisebox{-6pt}{\includegraphics[height=20pt]{university-emblem.pdf}}\hspace{6pt}{\fontsize{14pt}{17pt}\selectfont\bfseries 示例大学}}{示例城市}
+\hspace*{43pt}示例学院 · 示例专业 · 本科\hfill 20XX年X月 -- 20XX年X月
+
+\section{竞赛经历}
+\hspace*{10pt}\datedheading{示例创新竞赛}{示例奖项}
+示例赛道 · 团队项目《示例项目名称》
+
+\section[开源贡献]{\raisebox{-1.5pt}{\includegraphics[height=13pt]{github-mark.pdf}}\hspace{5pt}开源贡献}
+\hspace*{10pt}\datedheading{开源协作 · Agent / LLM 生态（GitHub：your-id）}{20XX年}
+\begin{itemize}
+  \item \textbf{生态贡献示例：}围绕工具调用、状态管理与测试稳定性参与社区协作；以可复现问题、清晰的代码改动和回归测试推动上游合入。
+  \item \textbf{框架 A（示例）：}完善 Tool Calling 参数校验与异常反馈，补充边界条件回归测试，减少失败调用的无效重试。
+  \item \textbf{平台 B（示例）：}统一跨平台路径处理和测试夹具加载方式，修复环境差异引发的测试失败，提升本地开发的可复现性。
+\end{itemize}
+
+\section{项目经历}
+\projectheading{零售经营分析 Agent 系统}{20XX年X月 -- 至今}
+{\leftskip=10pt\noindent 大促叠券与多规格商品的价格异常需跨 ERP、BI 和广告系统排查，人工拼接证据耗时且直接改价有资损风险；目标是让 Agent 完成可追溯归因、毛利测算与受控提案。\par}
+\begin{itemize}
+  \item \textbf{打通异构数据：}以 MCP Tool 与 CLI 适配层封装多源读取，统一 \texttt{sku\_id}、规格、促销状态等输入契约；将跨系统查询收束为标准工具结果，使异常证据可按商品与活动关联。
+  \item \textbf{约束推理与上下文：}将排查 SOP 拆为“感知—定位—比对—草稿”四阶段，按阶段暴露工具并传递结构化摘要；减少历史订单与原始报文对后续判断的干扰，保留可复核的归因链路。
+  \item \textbf{守住执行边界：}在 PreToolUse 阶段对调价幅度和毛利红线做确定性校验，按只读、受限执行和人工审批分级；高风险动作只生成含参数与依据的 Proposal，交由人工确认后执行。
+  \item \textbf{闭合恢复与验证：}隔离 Session/Workspace，以增量 JSONL 记录执行与未决审批状态；结合异常促销和对抗改价样本检查恢复、红线拦截与诊断流程，形成可重复的回归入口。
+\end{itemize}
+
+\projectheading{服务故障诊断 Agent 系统}{20XX年X月 -- 至今}
+{\leftskip=10pt\noindent 微服务故障发生时，指标、日志、链路与 Kubernetes 事件分散，告警噪声和反复试探会延长定位；目标是在只读边界内收敛根因证据，并让止血动作经过人工确认。\par}
+\begin{itemize}
+  \item \textbf{统一只读诊断面：}为 Prometheus、Loki、Jaeger 与 Kubernetes 状态封装 CLI/MCP 适配器，在参数入口限定集群命名空间与时间窗；让 Agent 能围绕同一故障范围下钻异构数据。
+  \item \textbf{按时间线组织证据：}将排障 SOP 切分为探活与深层排查，按异常时间窗关联指标、Pod 事件、日志和调用链；优先呈现与故障相关的片段，避免长日志淹没关键堆栈。
+  \item \textbf{抑制无效工具循环：}对重复失败的调用计算工具与目标指纹，触发熔断后返回结构化错误和替代查询建议；让后续排查转向新的证据路径，而非持续微调相同参数。
+  \item \textbf{隔离处置与回归：}在容器化只读环境执行诊断，将回滚、重启等写操作转为待二次审批的 Proposal；沉淀故障轨迹，回归检查根因定位与高危操作边界。
+\end{itemize}
+
+\section{专业技能}
+\textbf{语言与工程：}Python、TypeScript、JavaScript、Node.js、Docker、SQLite、Git；具备跨平台测试与 Linux 排障经验。\\
+\textbf{Agent 与基础：}MCP、Tool Calling、上下文管理、状态机与权限拦截；掌握计算机网络、操作系统、数据结构与算法。
+
+\end{document}
